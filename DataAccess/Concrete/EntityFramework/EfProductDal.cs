@@ -1,5 +1,8 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntityFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,35 +13,22 @@ using System.Threading.Tasks;
 namespace DataAccess.Concrete.EntityFramework
 {
     //NuGet
-    public class EfProductDal : IProductDal
+    public class EfProductDal : EfEntityRepositoryBase<Product, NorthwindContext>, IProductDal
     {
-        public void Add(Product entity)
+        public List<ProductDetailDto> GetProductDetails()
         {
-            //IDısposable pattern implementation of
-            using (NorthwindContext context=new NorthwindContext() )
+            using (NorthwindContext context = new NorthwindContext() )
             {
-
+                var result = from p in context.Products
+                             join c in context.Categories
+                             on p.CategoryId equals c.CategoyId
+                             select new ProductDetailDto 
+                             {
+                                 ProductId = p.ProductId, ProductName = p.ProductName, 
+                                 CategoryName = c.CategoryName, UnitsInStock = p.UnitsInStock 
+                             };
+                return result.ToList();
             }
-        }
-
-        public void Delete(Product entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Product Get(Expression<Func<Product, bool>> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Product> GetAll(Expression<Func<Product, bool>> filter = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Product entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

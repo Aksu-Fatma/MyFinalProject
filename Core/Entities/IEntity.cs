@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Concrete
+namespace Core.Entities
 {
-    internal class EntityFramework
+    //IEntity İmplement eden class bir veritabanı tablosudur 
+    public interface IEntity
     {
+
     }
 }
